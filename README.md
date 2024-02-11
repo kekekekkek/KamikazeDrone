@@ -4,7 +4,7 @@ You can watch this short [video](https://www.youtube.com/watch?v=tBbA9CWrM7o) to
 
 # Installation
 Installing the plugin consists of several steps:
-1. [Download]() this plugin;
+1. [Download](https://github.com/kekekekkek/KamikazeDrone/archive/refs/heads/main.zip) this plugin;
 2. Go to the directory `..\Sven Co-op\svencoop\scripts\plugins` and put the folder `KamikazeDrone` there;
 3. Then move the `models` and `sprites` folders from the `..\Sven Co-op\sven coop\scripts\plugins\KamikazeDrone` to the `..\Sven Co-op\svencoop` folder;
 5. Next, go to the `..\Sven Co-op\svencoop` folder and find there the text file `default_plugins.txt`;
@@ -31,7 +31,7 @@ When you start the game and connect to your server, you will have the following 
 | `.kd_ao`, `/kd_ao` or `!kd_ao` | `0` | `1` | `0` | Allows you to enable this feature only for admins or for all players.<br>`0 - For everyone;`<br>`1 - Admins only.` | Usage: `.kd_ao//kd_ao/!kd_ao <adminsonly>.` Example: `!kd_ao 0` |
 
 **REMEMBER**: This plugin is not the final version, as it has a lot of bugs. In the future, it will be completed.<br>
-**REMEMBER**: Also, the plugin has a folder `Templates` in which all the images that were used to create the interface for the drone are located. You can edit them and compile the sprite using the `SpriteExplorer` program.<br>
+**REMEMBER**: Also, the plugin has a folder `Templates` in which all the images that were used to create the interface for the drone are located. You can edit them and compile the sprite using the `SpriteExplorer` program. And you will need `Photoshop` to edit the image and make several frames out of it.<br>
 **REMEMBER**: Also, the original drone models that were used are shown in the links below.<br>
 
 # Additionally
@@ -40,6 +40,8 @@ When you start the game and connect to your server, you will have the following 
 
 # Screenshots
 * Screenshot 1<br><br>
-![Screenshot_1]()
+![Screenshot_1](https://github.com/kekekekkek/KamikazeDrone/blob/main/KamikazeDrone/Images/Screenshot_1.png)
 * Screenshot 2<br><br>
-![Screenshot_2]()
+![Screenshot_2](https://github.com/kekekekkek/KamikazeDrone/blob/main/KamikazeDrone/Images/Screenshot_2.png)
+* Screenshot 3<br><br>
+![Screenshot_3](https://github.com/kekekekkek/KamikazeDrone/blob/main/KamikazeDrone/Images/Screenshot_3.png)
