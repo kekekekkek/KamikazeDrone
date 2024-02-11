@@ -134,7 +134,6 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 		локального игрока временно бессмертным*/
 		
 		pDrone.pPlayer.pev.flags = FL_GODMODE;
-		pDrone.pPlayer.pev.movetype = MOVETYPE_FLY;
 		ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[pDrone.iModelNum]);
 	
 		Vector vVecAngles = pDrone.pPlayer.pev.v_angle;
