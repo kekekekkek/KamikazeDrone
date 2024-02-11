@@ -31,6 +31,7 @@ When you start the game and connect to your server, you will have the following 
 | `.kd_ao`, `/kd_ao` or `!kd_ao` | `0` | `1` | `0` | Allows you to enable this feature only for admins or for all players.<br>`0 - For everyone;`<br>`1 - Admins only.` | Usage: `.kd_ao//kd_ao/!kd_ao <adminsonly>.` Example: `!kd_ao 0` |
 
 **REMEMBER**: This plugin is not the final version, as it has a lot of bugs. In the future, it will be completed.<br>
+**REMEMBER**: The drone model has size issues.<br>
 **REMEMBER**: Also, the plugin has a folder `Templates` in which all the images that were used to create the interface for the drone are located. You can edit them and compile the sprite using the `SpriteExplorer` program. And you will need `Photoshop` to edit the image and make several frames out of it.<br>
 **REMEMBER**: Also, the original drone models that were used are shown in the links below.<br>
 
