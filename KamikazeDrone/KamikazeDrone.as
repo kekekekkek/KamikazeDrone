@@ -150,14 +150,14 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 		if (pDrone.bDroneTime)
 		{
 			int iCurSecond = atoi(g_Engine.time - pDrone.fDroneTime);
-			float iCurFrame = Math.Floor(pDroneParam.iMaxFrames / pDroneParam.fDroningTime * iCurSecond);
+			float fCurFrame = Math.Floor(pDroneParam.iMaxFrames / pDroneParam.fDroningTime * iCurSecond);
 			
-			pDrone.iGetFrame = atoi(iCurFrame);
+			pDrone.iGetFrame = atoi(fCurFrame);
 			
 			/*При достижении последнего кадра, делаем тот же самый
 			сброс, только без взрыва*/
 			
-			if (iCurFrame >= pDroneParam.iMaxFrames)
+			if (fCurFrame >= pDroneParam.iMaxFrames)
 			{
 				ShowHUD(pDrone.pPlayer, true);
 				ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[0]);
