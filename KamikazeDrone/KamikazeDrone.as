@@ -157,7 +157,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			/*При достижении последнего кадра, делаем тот же самый
 			сброс, только без взрыва*/
 			
-			if (iCurFrame >= 4.0f)
+			if (iCurFrame >= pDroneParam.iMaxFrames)
 			{
 				ShowHUD(pDrone.pPlayer, true);
 				ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[0]);
