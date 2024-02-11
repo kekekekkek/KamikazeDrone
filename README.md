@@ -34,6 +34,13 @@ When you start the game and connect to your server, you will have the following 
 **REMEMBER**: Also, the plugin has a folder `Templates` in which all the images that were used to create the interface for the drone are located. You can edit them and compile the sprite using the `SpriteExplorer` program. And you will need `Photoshop` to edit the image and make several frames out of it.<br>
 **REMEMBER**: Also, the original drone models that were used are shown in the links below.<br>
 
+# Drone Control
+`LMB` (Left Mouse Button) / `IN_ATTACK` - Forced drone explosion;<br>
+`RMB` (Right Mouse Button) / `IN_ATTACK2` - Throw grenade;<br>
+`Space` / `IN_JUMP` - Move up;<br>
+`W (ASD)` / `IN_FORWARD` - Move forward;<br>
+`E` / `IN_USE` - Go down.
+
 # Additionally
 1. SpriteExplorer - https://gamebanana.com/tools/4775;
 2. Military drones models - https://gamebanana.com/mods/39913.
