@@ -316,7 +316,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 	}
 }
 
-void DrawDrone(CDrone@ pDrone, CDroneParam@ pDroneParam, string strFileName)
+void DrawDrone(CDrone@ pDrone, string strFileName)
 {
 	HUDSpriteParams pHudSpriteParams;
 	pHudSpriteParams.spritename = strFileName;
@@ -669,7 +669,7 @@ HookReturnCode PlayerPreThink(CBasePlayer@ pPlayer, uint& out)
 		if (g_Drone[i].bCanDrone)
 		{
 			HideHUD(g_Drone[i].pPlayer);
-			DrawDrone(g_Drone[i], g_DroneParam, "kamikazedrone_gui/DroneGUI" + g_Drone[i].strLang + ".spr");
+			DrawDrone(g_Drone[i], "kamikazedrone_gui/DroneGUI" + g_Drone[i].strLang + ".spr");
 			StartDrone(g_Drone[i], g_DroneParam);
 		}
 	}
