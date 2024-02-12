@@ -428,7 +428,10 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 				}
 			}
 			else
-				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: You can only launch a drone on the ground.\n");
+			{
+				if (!g_Drone[iPlayerNum].bCanDrone)
+					g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: You can only launch a drone on the ground.\n");
+			}
 			
 			pSayParam.ShouldHide = true;
 			return HOOK_HANDLED;
