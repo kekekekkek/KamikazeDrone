@@ -406,24 +406,29 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".drone"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/drone"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!drone")
-		{
-			if (g_Drone[iPlayerNum].pPlayer.IsAlive())
+		{	
+			if ((pSayParam.GetPlayer().pev.flags & FL_ONGROUND) != 0)
 			{
-				if (!g_Drone[iPlayerNum].bCanDrone && (IsPlayerAdmin(pSayParam.GetPlayer()) || !g_DroneParam.bAdminsOnly))
+				if (g_Drone[iPlayerNum].pPlayer.IsAlive())
 				{
-					g_Drone[iPlayerNum].bCanDrone = true;				
-					g_Drone[iPlayerNum].iGrenades = g_DroneParam.iMaxGrenades;
-					g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();	
-					g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 25.0f));
-					
-					g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
-					g_Drone[iPlayerNum].pSprite.TurnOn();
-					
-					g_PlayerFuncs.ConcussionEffect(g_Drone[iPlayerNum].pPlayer, 25.0f, 1.0f, g_DroneParam.fDroningTime);
+					if (!g_Drone[iPlayerNum].bCanDrone && (IsPlayerAdmin(pSayParam.GetPlayer()) || !g_DroneParam.bAdminsOnly))
+					{
+						g_Drone[iPlayerNum].bCanDrone = true;				
+						g_Drone[iPlayerNum].iGrenades = g_DroneParam.iMaxGrenades;
+						g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();	
+						g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 25.0f));
+						
+						g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
+						g_Drone[iPlayerNum].pSprite.TurnOn();
+						
+						g_PlayerFuncs.ConcussionEffect(g_Drone[iPlayerNum].pPlayer, 25.0f, 1.0f, g_DroneParam.fDroningTime);
+					}
+					else
+						g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The drone feature is now available only to admins.\n");
 				}
-				else
-					g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The drone feature is now available only to admins.\n");
 			}
+			else
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: You can only launch a drone on the ground.\n");
 			
 			pSayParam.ShouldHide = true;
 			return HOOK_HANDLED;
