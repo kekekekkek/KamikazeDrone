@@ -4,6 +4,7 @@ CDroneParam g_DroneParam;
 class CDrone
 {
 	CSprite@ pSprite = null;
+	string strSaveModel = "";
 
 	string strAuthId = "";
 	float fSaveTime = 0.0f;
@@ -160,7 +161,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			if (fCurFrame >= pDroneParam.iMaxFrames)
 			{
 				ShowHUD(pDrone.pPlayer, true);
-				ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[0]);
+				ChangeModel2(pDrone.pPlayer, pDrone.strSaveModel);
 				
 				pDrone.pPlayer.pev.effects = 0;
 				pDrone.pPlayer.pev.gravity = 1.0f;				
@@ -218,7 +219,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			if ((pDrone.pPlayer.pev.button & IN_ATTACK) != 0)
 			{
 				ShowHUD(pDrone.pPlayer, true);
-				ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[0]);
+				ChangeModel2(pDrone.pPlayer, pDrone.strSaveModel);
 				g_PlayerFuncs.HudToggleElement(pDrone.pPlayer, 0, false);
 				
 				pDrone.bCanDrone = false;
@@ -293,7 +294,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			if (bExplode)
 			{
 				ShowHUD(pDrone.pPlayer, true);
-				ChangeModel2(pDrone.pPlayer, pDroneParam.strModels[0]);
+				ChangeModel2(pDrone.pPlayer, pDrone.strSaveModel);
 				g_PlayerFuncs.HudToggleElement(pDrone.pPlayer, 0, false);
 				
 				pDrone.bCanDrone = false;
@@ -421,6 +422,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 						g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
 						g_Drone[iPlayerNum].pSprite.TurnOn();
 						
+						g_Drone[iPlayerNum].strSaveModel = g_EngineFuncs.GetInfoKeyBuffer(pSayParam.GetPlayer().edict()).GetValue("model");
 						g_PlayerFuncs.ConcussionEffect(g_Drone[iPlayerNum].pPlayer, 25.0f, 1.0f, g_DroneParam.fDroningTime);
 					}
 					else
