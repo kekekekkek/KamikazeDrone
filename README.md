@@ -22,7 +22,9 @@ Installing the plugin consists of several steps:
 When you start the game and connect to your server, you will have the following plugin commands at your disposal, which you will have to write in the game chat to activate them.
 | Command | MinValue | MaxValue | DefValue | Description | Usage | 
 | ------- | -------- | -------- | -------- | ----------- | ----- |
+| `.kamikazedrone`, `/kamikazedrone` or `!kamikazedrone` | `0` | `1` | `1` | Allows you to enable or disable this feature. | Usage: `.kamikazedrone//kamikazedrone/!kamikazedrone <enabled>`. Example: `!kamikazedrone 1` |
 | `.drone`, `/drone` or `!drone` | `-` | `-` | `-` | Allows you to launch a drone. | `No arguments.` |
+| `.kd_reset`, `/kd_reset` or `!kd_reset` | `-` | `-` | `-` | Allows you to reset the settings to the default settings. | `No arguments.` |
 | `.kd_model`, `/kd_model` or `!kd_model` | `1` | `2` | `2` | Allows you to change the drone model. | Usage: `.kd_model//kd_model/!kd_model <modelnum>.` Example: `!kd_model 2` |
 | `.kd_explampl`, `/kd_explampl` or `!kd_explampl` | `1` | `5000` | `500` | Allows you to specify the amplitude of the drone's explosion. | Usage: `.kd_explampl//kd_explampl/!kd_explampl <amplitude>.` Example: `!kd_explampl 500` |
 | `.kd_drtime`, `/kd_drtime` or `!kd_drtime` | `15.0` | `120.0` | `30.0` | Allows you to specify the flight time of the drone. | Usage: `.kd_drtime//kd_drtime/!kd_drtime <time>.` Example: `!kd_drtime 27.5` |
