@@ -493,21 +493,26 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/kamikazedrone"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!kamikazedrone")
 		{
-			strValue = pSayParam.GetArguments().Arg(1);
-			
-			if (IsNaN(strValue))
+			if (IsPlayerAdmin(pSayParam.GetPlayer()))
 			{
-				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The argument is not a number!\n");
-				bError = true;
+				strValue = pSayParam.GetArguments().Arg(1);
+				
+				if (IsNaN(strValue))
+				{
+					g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The argument is not a number!\n");
+					bError = true;
+				}
+				
+				if (!bError)
+				{
+					g_DroneParam.bIsEnabled = (Math.clamp(0, 1, atoi(strValue)) == 0 ? false : true);
+					g_PlayerFuncs.SayTextAll(pSayParam.GetPlayer(), (!g_DroneParam.bIsEnabled
+						? "[KDSuccess]: The kamikaze drone feature is disabled!\n" 
+						: "[KDSuccess]: The kamikaze drone feature is enabled!\n"));
+				}
 			}
-			
-			if (!bError)
-			{
-				g_DroneParam.bIsEnabled = (Math.clamp(0, 1, atoi(strValue)) == 0 ? false : true);
-				g_PlayerFuncs.SayTextAll(pSayParam.GetPlayer(), (!g_DroneParam.bIsEnabled
-					? "[KDSuccess]: The kamikaze drone feature is disabled!\n" 
-					: "[KDSuccess]: The kamikaze drone feature is enabled!\n"));
-			}
+			else
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: This command is for admins only.\n");
 			
 			pSayParam.ShouldHide = true;
 			return HOOK_HANDLED;
