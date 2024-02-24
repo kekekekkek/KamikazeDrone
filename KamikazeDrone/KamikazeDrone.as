@@ -34,6 +34,7 @@ class CDroneParam
 	дрона. Вы можете изменить это число, если Ваш спрайт будет содержать
 	более 4 кадров*/
 	
+	bool bIsEnabled = true;
 	bool bAdminsOnly = false;
 	
 	int iMaxFrames = 4;
@@ -351,6 +352,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 {
 	array<string> strCommands = 
 	{
+		".kamikazedrone", "/kamikazedrone", "!kamikazedrone",
 		".kd_model", "/kd_model", "!kd_model",
 		".kd_explampl", "/kd_explampl", "!kd_explampl",
 		".kd_drtime", "/kd_drtime", "!kd_drtime",
@@ -362,6 +364,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 	
 	array<string> strDescriptions =
 	{
+		"[KDInfo]: Usage: .kamikazedrone//kamikazedrone/!kamikazedrone <enabled>. Example: !kamikazedrone 1\n",
 		"[KDInfo]: Usage: .kd_model//kd_model/!kd_model <modelnum>. Example: !kd_model 2\n",
 		"[KDInfo]: Usage: .kd_explampl//kd_explampl/!kd_explampl <amplitude>. Example: !kd_explampl 500\n",
 		"[KDInfo]: Usage: .kd_drtime//kd_drtime/!kd_drtime <time>. Example: !kd_drtime 27.5\n",
@@ -407,34 +410,61 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".drone"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/drone"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!drone")
-		{	
-			if ((pSayParam.GetPlayer().pev.flags & FL_ONGROUND) != 0)
+		{
+			if (g_DroneParam.bIsEnabled)
 			{
-				if (g_Drone[iPlayerNum].pPlayer.IsAlive())
+				if ((pSayParam.GetPlayer().pev.flags & FL_ONGROUND) != 0)
 				{
-					if (!g_Drone[iPlayerNum].bCanDrone && (IsPlayerAdmin(pSayParam.GetPlayer()) || !g_DroneParam.bAdminsOnly))
+					if (g_Drone[iPlayerNum].pPlayer.IsAlive())
 					{
-						g_Drone[iPlayerNum].bCanDrone = true;				
-						g_Drone[iPlayerNum].iGrenades = g_DroneParam.iMaxGrenades;
-						g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();	
-						g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 25.0f));
-						
-						g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
-						g_Drone[iPlayerNum].pSprite.TurnOn();
-						
-						g_Drone[iPlayerNum].strSaveModel = g_EngineFuncs.GetInfoKeyBuffer(pSayParam.GetPlayer().edict()).GetValue("model");
-						g_PlayerFuncs.ConcussionEffect(g_Drone[iPlayerNum].pPlayer, 25.0f, 1.0f, g_DroneParam.fDroningTime);
+						if (!g_Drone[iPlayerNum].bCanDrone && (IsPlayerAdmin(pSayParam.GetPlayer()) || !g_DroneParam.bAdminsOnly))
+						{
+							g_Drone[iPlayerNum].bCanDrone = true;				
+							g_Drone[iPlayerNum].iGrenades = g_DroneParam.iMaxGrenades;
+							g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();	
+							g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 25.0f));
+							
+							g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
+							g_Drone[iPlayerNum].pSprite.TurnOn();
+							
+							g_Drone[iPlayerNum].strSaveModel = g_EngineFuncs.GetInfoKeyBuffer(pSayParam.GetPlayer().edict()).GetValue("model");
+							g_PlayerFuncs.ConcussionEffect(g_Drone[iPlayerNum].pPlayer, 25.0f, 1.0f, g_DroneParam.fDroningTime);
+						}
+						else
+							g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The drone feature is now available only to admins.\n");
 					}
-					else
-						g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The drone feature is now available only to admins.\n");
+				}
+				else
+				{
+					if (!g_Drone[iPlayerNum].bCanDrone)
+						g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: You can only launch a drone on the ground.\n");
 				}
 			}
 			else
-			{
-				if (!g_Drone[iPlayerNum].bCanDrone)
-					g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: You can only launch a drone on the ground.\n");
-			}
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The kamikaze drone feature is disabled at the moment.\n");
 			
+			pSayParam.ShouldHide = true;
+			return HOOK_HANDLED;
+		}
+		
+		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".kd_reset"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/kd_reset"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!kd_reset")
+		{
+			if (IsPlayerAdmin(pSayParam.GetPlayer()))
+			{
+				g_DroneParam.bIsEnabled = true;
+				g_DroneParam.bAdminsOnly = false;
+				g_DroneParam.iMaxGrenades = 5;
+				g_DroneParam.iExplodeAmplitude = 500;
+				g_DroneParam.fDroningTime = 30.0f;
+				g_DroneParam.fGrenadeTime = 3.0f;
+			
+				g_PlayerFuncs.SayTextAll(pSayParam.GetPlayer(), "[KDInfo]: All settings of the kamikaze drone have been reset to the default values.\n");
+			}
+			else
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: This command is for admins only.\n");
+				
 			pSayParam.ShouldHide = true;
 			return HOOK_HANDLED;
 		}
@@ -443,7 +473,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 		{
 			if (pSayParam.GetArguments().Arg(0).ToLowercase() == strCommands[i])
 			{
-				uint uLine = atoi(Math.Floor((strDescriptions.length() * 1.0f / strCommands.length() * 1.0f) * (i == 0 ? 1 : i) - (0.03f * i)));
+				uint uLine = atoi(Math.Floor((strDescriptions.length() * 1.0f / strCommands.length() * 1.0f) * (i == 0 ? 1 : i) - (0.02f * i)));
 				
 				if (!IsPlayerAdmin(pSayParam.GetPlayer()) 
 					&& (uLine == 1 || uLine == 2 || uLine == 3 || uLine == 4 || uLine == 6))
@@ -459,6 +489,30 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 	
 	if (pSayParam.GetArguments().ArgC() == 2)
 	{
+		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".kamikazedrone"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/kamikazedrone"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!kamikazedrone")
+		{
+			strValue = pSayParam.GetArguments().Arg(1);
+			
+			if (IsNaN(strValue))
+			{
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The argument is not a number!\n");
+				bError = true;
+			}
+			
+			if (!bError)
+			{
+				g_DroneParam.bIsEnabled = (Math.clamp(0, 1, atoi(strValue)) == 0 ? false : true);
+				g_PlayerFuncs.SayTextAll(pSayParam.GetPlayer(), (!g_DroneParam.bIsEnabled
+					? "[KDSuccess]: The kamikaze drone feature is disabled!\n" 
+					: "[KDSuccess]: The kamikaze drone feature is enabled!\n"));
+			}
+			
+			pSayParam.ShouldHide = true;
+			return HOOK_HANDLED;
+		}
+	
 		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".kd_model"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/kd_model"
 			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!kd_model")
