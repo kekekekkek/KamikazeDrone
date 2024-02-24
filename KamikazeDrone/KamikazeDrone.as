@@ -23,6 +23,7 @@ class CDrone
 	параметр iMaxGrenades класса CDroneParam.*/
 	
 	int iGrenades = 0;
+	int iGrenadeType = 0;
 	uint iModelNum = 2;
 	string strLang = "En";
 }
@@ -258,7 +259,10 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			{
 				if ((pDrone.fSaveTime + 0.1f) < g_Engine.time)
 				{
-					g_EntityFuncs.ShootTimed(pDrone.pPlayer.pev, pDrone.pPlayer.pev.origin, Vector(), pDroneParam.fGrenadeTime);
+					(pDrone.iGrenadeType == 0 
+						? g_EntityFuncs.ShootTimed(pDrone.pPlayer.pev, pDrone.pPlayer.pev.origin, Vector(), pDroneParam.fGrenadeTime)
+						: g_EntityFuncs.ShootContact(pDrone.pPlayer.pev, pDrone.pPlayer.pev.origin, Vector()));
+					
 					pDrone.bThrowGrenade = false;
 					
 					string strMsg = ("Grenades: " + pDrone.iGrenades);
@@ -358,6 +362,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 		".kd_drtime", "/kd_drtime", "!kd_drtime",
 		".kd_grtime", "/kd_grtime", "!kd_grtime",
 		".kd_maxgr", "/kd_maxgr", "!kd_maxgr",
+		".kd_grtype", "/kd_grtype", "!kd_grtype",
 		".kd_lang", "/kd_lang", "!kd_lang",
 		".kd_ao", "/kd_ao", "!kd_ao",
 	};
@@ -370,6 +375,7 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 		"[KDInfo]: Usage: .kd_drtime//kd_drtime/!kd_drtime <time>. Example: !kd_drtime 27.5\n",
 		"[KDInfo]: Usage: .kd_grtime//kd_grtime/!kd_grtime <time>. Example: !kd_grtime 3.0\n",
 		"[KDInfo]: Usage: .kd_maxgr//kd_maxgr/!kd_maxgr <maxgrenades>. Example: !kd_maxgr 5\n",
+		"[KDInfo]: Usage: .kd_grtype//kd_grtype/!kd_grtype <grenadetype>. Example: !kd_grtype 0\n",
 		"[KDInfo]: Usage: .kd_lang//kd_lang/!kd_lang <lang>. Example: !kd_lang ru or !kd_lang en\n",
 		"[KDInfo]: Usage: .kd_ao//kd_ao/!kd_ao <adminsonly>. Example: !kd_ao 0\n",
 	};
@@ -648,6 +654,33 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 			}
 			else
 				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: This command is for admins only.\n");
+			
+			pSayParam.ShouldHide = true;
+			return HOOK_HANDLED;
+		}
+		
+		if (pSayParam.GetArguments().Arg(0).ToLowercase() == ".kd_grtype"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "/kd_grtype"
+			|| pSayParam.GetArguments().Arg(0).ToLowercase() == "!kd_grtype")
+		{
+			strValue = pSayParam.GetArguments().Arg(1);
+			
+			if (IsNaN(strValue))
+			{
+				g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The argument is not a number!\n");
+				bError = true;
+			}
+			
+			if (!bError)
+			{
+				if (!g_Drone[iPlayerNum].bCanDrone)
+				{
+					g_Drone[iPlayerNum].iGrenadeType = Math.clamp(0, 1, atoi(strValue));
+					g_PlayerFuncs.SayTextAll(pSayParam.GetPlayer(), "[KDSuccess]: The value of the grenade type has been successfully changed to \"" + g_Drone[iPlayerNum].iGrenadeType + "\"!\n");
+				}
+				else
+					g_PlayerFuncs.SayText(pSayParam.GetPlayer(), "[KDError]: The type of grenade cannot be changed during droning!\n");
+			}
 			
 			pSayParam.ShouldHide = true;
 			return HOOK_HANDLED;
