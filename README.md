@@ -44,7 +44,8 @@ When you start the game and connect to your server, you will have the following 
 `RMB` (Right Mouse Button) / `IN_ATTACK2` - Throw grenade;<br>
 `Space` / `IN_JUMP` - Move up;<br>
 `W (ASD)` / `IN_FORWARD` - Move forward;<br>
-`E` / `IN_USE` - Go down.
+`E` / `IN_USE` - Go down.<br>
+* Manipulate the value of the `sv_airaccelerate` command for better movement.
 
 # Additionally
 1. SpriteExplorer - https://gamebanana.com/tools/4775;
