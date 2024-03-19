@@ -176,7 +176,6 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.bCanDrone = false;
 				pDrone.bDroneTime = false;
 				pDrone.pSprite.TurnOff();
-				pDrone.iGrenades = pDroneParam.iMaxGrenades;
 			}
 		}
 	
@@ -189,7 +188,7 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 			g_Utility.TraceLine(vVecEyePos, (vVecEyePos + (vVecDirection * Math.INT32_MAX)), dont_ignore_monsters, pDrone.pPlayer.edict(), trResult);
 			
 			/*Взрываем дрона в том случае, если расcтояние между игроком и одним из лучей < 35.0f
-			или если игрока убили в момент запуска дрона, или если его скоросить слишком мала, чтобы привести
+			или если игрока убили в момент запуска дрона, или если его скорость слишком мала, чтобы привести
 			дрона к взрыву*/
 			
 			if (pDrone.pPlayer.pev.velocity.Length() > 250.0f)
@@ -227,7 +226,6 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.bCanDrone = false;
 				pDrone.bDroneTime = false;
 				pDrone.pSprite.TurnOff();
-				pDrone.iGrenades = pDroneParam.iMaxGrenades;
 				
 				g_EntityFuncs.CreateExplosion(pDrone.pPlayer.pev.origin, Vector(), pDrone.pPlayer.edict(), pDroneParam.iExplodeAmplitude, true);
 				
@@ -288,11 +286,6 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				{
 					pDrone.pPlayer.pev.velocity.x += (vVecDirection.x / 0.5f);
 					pDrone.pPlayer.pev.velocity.y += (vVecDirection.y / 0.5f);
-					
-					/*При большой скорости снижение дрона идёт слишком быстро,
-					возможно стоит поманипулировать значением гравитации. Сделал
-					при снижении и повышении высоты*/
-					//pDrone.pPlayer.pev.velocity.z += (vVecDirection.z / 0.5f);
 				}
 			}
 			
@@ -305,7 +298,6 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.bCanDrone = false;
 				pDrone.bDroneTime = false;
 				pDrone.pSprite.TurnOff();
-				pDrone.iGrenades = pDroneParam.iMaxGrenades;
 				
 				g_EntityFuncs.CreateExplosion(trResult.vecEndPos, Vector(), pDrone.pPlayer.edict(), pDroneParam.iExplodeAmplitude, true);
 				
