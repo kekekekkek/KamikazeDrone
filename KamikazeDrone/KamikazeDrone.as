@@ -11,7 +11,9 @@ class CDrone
 
 	int iGetFrame = 0;
 	CBasePlayer@ pPlayer = null;
+	
 	Vector vecSaveOrigin = Vector();
+	Vector vecSaveAngles = Vector();
 	
 	bool bDroneTime = false;
 	float fDroneTime = 0.0f;
@@ -169,8 +171,11 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.pPlayer.pev.gravity = 1.0f;				
 				pDrone.pPlayer.pev.flags = FL_CLIENT;
 				pDrone.pPlayer.pev.origin = pDrone.vecSaveOrigin;
-				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);
 				
+				pDrone.pPlayer.pev.angles = pDrone.vecSaveAngles;
+				pDrone.pPlayer.pev.fixangle = FAM_FORCEVIEWANGLES;
+				
+				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);	
 				pDrone.pPlayer.UnblockWeapons(pDrone.pPlayer);	
 				
 				pDrone.bCanDrone = false;
@@ -233,9 +238,13 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.pPlayer.pev.gravity = 1.0f;		
 				pDrone.pPlayer.pev.flags = FL_CLIENT;
 				pDrone.pPlayer.pev.origin = pDrone.vecSaveOrigin;
-				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);
 				
+				pDrone.pPlayer.pev.angles = pDrone.vecSaveAngles;
+				pDrone.pPlayer.pev.fixangle = FAM_FORCEVIEWANGLES;
+				
+				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);	
 				pDrone.pPlayer.UnblockWeapons(pDrone.pPlayer);
+				
 				return;
 			}
 			
@@ -305,9 +314,13 @@ void StartDrone(CDrone@ pDrone, CDroneParam@ pDroneParam)
 				pDrone.pPlayer.pev.gravity = 1.0f;		
 				pDrone.pPlayer.pev.flags = FL_CLIENT;
 				pDrone.pPlayer.pev.origin = pDrone.vecSaveOrigin;
-				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);
 				
+				pDrone.pPlayer.pev.angles = pDrone.vecSaveAngles;
+				pDrone.pPlayer.pev.fixangle = FAM_FORCEVIEWANGLES;
+				
+				pDrone.pPlayer.pev.velocity = (pDrone.pPlayer.pev.velocity * 0.0f);		
 				pDrone.pPlayer.UnblockWeapons(pDrone.pPlayer);
+				
 				return;
 			}
 		}
@@ -417,10 +430,11 @@ HookReturnCode ClientSay(SayParameters@ pSayParam)
 					{
 						if (!g_Drone[iPlayerNum].bCanDrone && (IsPlayerAdmin(pSayParam.GetPlayer()) || !g_DroneParam.bAdminsOnly))
 						{
-							g_Drone[iPlayerNum].bCanDrone = true;				
+							g_Drone[iPlayerNum].bCanDrone = true;
 							g_Drone[iPlayerNum].iGrenades = g_DroneParam.iMaxGrenades;
-							g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();	
-							g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 25.0f));
+							g_Drone[iPlayerNum].vecSaveOrigin = pSayParam.GetPlayer().GetOrigin();
+							g_Drone[iPlayerNum].vecSaveAngles = pSayParam.GetPlayer().pev.angles;
+							g_Drone[iPlayerNum].pPlayer.SetOrigin(Vector(g_Drone[iPlayerNum].vecSaveOrigin.x, g_Drone[iPlayerNum].vecSaveOrigin.y, g_Drone[iPlayerNum].vecSaveOrigin.z + 30.0f));
 							
 							g_Drone[iPlayerNum].pSprite.SetOrigin(g_Drone[iPlayerNum].vecSaveOrigin);
 							g_Drone[iPlayerNum].pSprite.TurnOn();
